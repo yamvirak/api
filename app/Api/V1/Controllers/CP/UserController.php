@@ -23,7 +23,9 @@ class UserController extends ApiController
             'type'
         ]);
         
-
+        if( $req->key && $req->key !="" ){
+            $data = $data->where('name', 'like','%'.$req->key.'%')->orWhere('phone', 'like','%'.$req->key.'%');
+        }
         $data = $data->orderBy('id', 'desc')->paginate( $req->limit ? $req->limit : 20);
         return response()->json($data, 200);
     }

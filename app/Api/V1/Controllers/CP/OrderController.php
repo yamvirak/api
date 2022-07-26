@@ -22,6 +22,7 @@ class OrderController extends ApiController
         ->with([
             'cashier',
             'details',
+            'customer'
         ]); 
 
 
@@ -72,4 +73,22 @@ class OrderController extends ApiController
         
     }
     
+    function record(Request $req){
+       
+        $data           = Order::select('*')
+        ->with([
+            'cashier',
+            'details',
+        ]); 
+
+
+    //    // ==============================>> Date Range
+    //    if($req->from && $req->to && isValidDate($req->from) && isValidDate($req->to)){
+    //     $data = $data->whereBetween('created_at', [$req->from." 00:00:00", $req->to." 23:59:59"]);
+    // }
+    
+        $data = $data->orderBy('id', 'desc')
+        ->paginate( $req->limit ? $req->limit : 10);
+        return response()->json($data, 200);
+    }
 }

@@ -16,15 +16,17 @@ class SupplierController extends ApiController
 {
     use Helpers;
    
-    function listing(){
+    function listing(Request $req){
        
       
-        $data           = Supplier::select('id', 'name')
+        $data           = Supplier::select('*');
         
-        ->orderBy('id', 'ASC')
-        ->get();
+        if( $req->key && $req->key !="" ){
+            $data = $data->where('name', 'like','%'.$req->key.'%')->orWhere('phone', 'like','%'.$req->key.'%');
+        }
         
-        return $data; 
+        $data = $data->orderBy('id', 'desc')->limit(10)->get();
+        return response()->json($data, 200);
     }
 
 
@@ -42,14 +44,16 @@ class SupplierController extends ApiController
 
         //==============================>> Start Adding data
 
-        $product_type               =   New Type; 
-        $product_type->name         =   $req->name;  
+        $supplier               =   New Supplier; 
+        $supplier->name         =   $req->name;
+        $supplier->phone        =   $req->phone;
+        $supplier->address      =   $req->address;  
 
-        $product_type  ->save(); 
+        $supplier  ->save(); 
     
         return response()->json([
-            'product_type' => $product_type,
-            'message' => 'Product has been successfully created.'
+            'supplier' => $supplier,
+            'message' => 'Supplier has been successfully created.'
         ], 200);
         
     }
@@ -68,16 +72,19 @@ class SupplierController extends ApiController
         ]);
         
         //==============================>> Start Updating data
-        $product_type                         = Type::find($id);
-        if( $product_type){
+        $supplier                         = Supplier::find($id);
+        if( $supplier){
 
-            $product_type->name              = $req->input('name');
-            $product_type->save();
+            $supplier->name         =   $req->name;
+            $supplier->phone        =   $req->phone;
+            $supplier->address      =   $req->address;  
+    
+            $supplier  ->save();
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Product has been updated Successfully',
-                'product_type' => $product_type,
+                'message' => 'Supplier has been updated Successfully',
+                'supplier' => $supplier,
             ], 200);
 
         }else{

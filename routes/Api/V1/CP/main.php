@@ -12,7 +12,10 @@
 		$api->post('/pos/order', 				['uses' => 'POSController@makeOrder']);
 
 		$api->get('/sales', 					['uses' => 'OrderController@listing']);
+		//$api->get('/sales/record', 				['uses' => 'OrderController@record']);
 		$api->delete('/sales/{id}', 			['uses' => 'OrderController@delete']);
+
+		$api->get('/sales/report', 			['uses' => 'ReportController@report']);
 
 
 		//===================>> Admin Only!!!! :(
@@ -59,6 +62,12 @@
 			$api->post('/supplier', 				['uses' => 'SupplierController@create']);
 			$api->put('/supplier/{id}', 			['uses' => 'SupplierController@update']);
 			$api->delete('/supplier/{id}', 			['uses' => 'SupplierController@delete']);
+
+			$api->get('/customer', 					['uses' => 'CustomerController@listing']);
+			$api->post('/customer', 				['uses' => 'CustomerController@create']);
+			$api->put('/customer/{id}', 			['uses' => 'CustomerController@update']);
+			$api->delete('/customer/{id}', 			['uses' => 'CustomerController@delete']);
+
 
 			$api->get('/users', 						['uses' => 'UserController@listing']);
 			$api->post('/users/{id}/change-password',   ['uses' => 'UserController@changePassword']);

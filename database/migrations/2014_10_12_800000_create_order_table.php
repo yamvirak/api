@@ -21,6 +21,9 @@ class CreateOrderTable extends Migration
             $table->integer('cashier_id')->unsigned()->nullable();
             $table->foreign('cashier_id')->references('id')->on('admin');
 
+            $table->integer('customer_id')->unsigned()->nullable();
+            $table->foreign('customer_id')->references('id')->on('customer');
+
             $table->decimal('total_price', 10, 2)->default(0);
             $table->decimal('discount', 10, 2)->default(0);
             $table->decimal('total_received', 10, 2)->default(0);

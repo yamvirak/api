@@ -9,37 +9,50 @@ use Illuminate\Validation\Rule;
 //=====================================================================>> Third Library
 use Dingo\Api\Routing\Helpers;
 use JWTAuth;
+use DB;
 
 //=====================================================================>> Custom Library
 use App\Api\V1\Controllers\ApiController;
-use App\Model\Branch\Branch; 
+use App\Model\Order\Customer; 
 
-class BranchController extends ApiController
+class CustomerController extends ApiController
 {
     use Helpers;
    
     function listing(Request $req){
 
-        $data           = Branch::select('id', 'name', 'phone', 'address', 'created_at')
+        $data           = Customer::select('id', 'name', 'phone', 'address', 'created_at')
         ->with([
-            'staffs'
+            'order'
+        ])
+        ->withCount('order')
+        ->withCount([
+            'order as total_price' => function($query){
+                $query->select(DB::raw("SUM(total_price_khr) as total_price")); 
+            },
         ]);
-        if( $req->name && $req->name !="" ){
-            $data = $data->where('name', 'like','%'.$req->name.'%')->orWhere('phone', 'like','%'.$req->name.'%');
+
+        
+        if( $req->key && $req->key !="" ){
+            $data = $data->where('phone','like', '%'.$req->key.'%');
         }
-        
-        $data = $data->orderBy('id', 'desc')->limit(10)->get();
+        $data = $data->orderBy('id', 'desc')->paginate( $req->limit ? $req->limit : 20);
         return response()->json($data, 200);
-       
-        
     }
 
     function view($id = 0){
        
-        $data           = Branch::select('*')
+        $data           = Customer::select('*')
         ->with([
-            'staffs'
-        ])->find($id);
+            'order'
+        ])
+        ->withCount('order')
+        ->withCount([
+            'order as total_price' => function($query){
+                $query->select(DB::raw("SUM(total_price_khr) as total_price")); 
+            },
+        ])
+        ->find($id);
         
         return $data; 
     }
@@ -61,16 +74,16 @@ class BranchController extends ApiController
 
         //==============================>> Start Adding data
 
-        $branch                  =   New Branch; 
-        $branch->name            =   $req->name;  
-        $branch->phone           =   $req->input('phone');
-        $branch->address         =   $req->input('address');
+        $customer                  =   New Customer; 
+        $customer->name            =   $req->name;  
+        $customer->phone           =   $req->phone;
+        $customer->address         =   $req->address;
 
-        $branch->save(); 
+        $customer->save(); 
     
         return response()->json([
-            'branch' => $branch,
-            'message' => 'Branch has been successfully created.'
+            'customer' => $customer,
+            'message' => 'Customer has been successfully created.'
         ], 200);
         
     }
@@ -90,18 +103,18 @@ class BranchController extends ApiController
         ]);
         
         //==============================>> Start Updating data
-        $branch                    = Branch::find($id);
-        if($branch){
+        $customer                    = Customer::find($id);
+        if($customer){
 
-            $branch->name              = $req->input('name');
-            $branch->phone             = $req->input('phone');
-            $branch->address           = $req->input('address');
-            $branch->save();
+            $customer->name              = $req->input('name');
+            $customer->phone             = $req->input('phone');
+            $customer->address           = $req->input('address');
+            $customer->save();
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Branch has been updated Successfully',
-                'branch' => $branch,
+                'message' => 'customer has been updated Successfully',
+                'customer' => $customer,
             ], 200);
 
         }else{
@@ -115,7 +128,7 @@ class BranchController extends ApiController
 
     function delete($id = 0){
         
-        $data = Branch::find($id);
+        $data = Customer::find($id);
 
         //==============================>> Start deleting data
         if($data){

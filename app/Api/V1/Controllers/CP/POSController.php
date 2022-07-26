@@ -12,6 +12,7 @@ use JWTAuth;
 use App\Api\V1\Controllers\ApiController;
 use App\Model\Order\Order;
 use App\Model\Order\Detail;
+use App\Model\Order\Customer;
 use App\Model\Product\Product;
 use App\Model\Product\Type as ProductType;
 use App\Model\Income\Income;
@@ -47,11 +48,29 @@ class POSController extends ApiController
             'discount'          => 'required'
         ]);
 
+        $customer = Customer::where('phone',$req->phone)->first();
+        if($customer){
+            $order                  = new Order;
+            $order->customer_id     = $customer->id; 
+            $order->cashier_id      = $user->admin ? $user->admin->id : null; //TODO:: will find cashier later
+            $order->receipt_number  = $this->generateReceiptNumber(); 
+            $order->save(); 
+        }else {
+
+            $customer               = new Customer;
+            $customer->name         = $req->name;
+            $customer->phone        = $req->phone;
+            $customer->address      = $req->address;
+            $customer->save();
+
+            $order                  = new Order; 
+            $order->customer_id     = $customer->id; 
+            $order->cashier_id      = $user->admin ? $user->admin->id : null; //TODO:: will find cashier later
+            $order->receipt_number  = $this->generateReceiptNumber(); 
+            $order->save(); 
+        }
         //ACreate Order
-        $order                  = new Order; 
-        $order->cashier_id      = $user->admin ? $user->admin->id : null; //TODO:: will find cashier later
-        $order->receipt_number  = $this->generateReceiptNumber(); 
-        $order->save(); 
+        
 
         //Find Total Price & Order Detail
         $details = [];
@@ -78,7 +97,7 @@ class POSController extends ApiController
                     'unit_price'    => $product->unit_price
                 ];
 
-                $totalPrice +=  $qty*$product->unit_price - $qty*$product->unit_price*$product->discount*0.001; 
+                $totalPrice +=  $qty*$product->unit_price - $qty*$product->unit_price*$product->discount*0.01; 
             }
         }
         //Save tot Details

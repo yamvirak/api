@@ -17,6 +17,9 @@ class CreateCustomerTable extends Migration
             $table->increments('id', 11);
             $table->string('name', 150)->default(''); 
             $table->string('phone', 50)->unique()->nullable();
+            $table->string('address', 150)->default(''); 
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -16,6 +16,11 @@ class Order extends Model
         ->select('id', 'name');
     }
 
+    public function customer() {
+        return $this->belongsTo('App\Model\Order\Customer', 'customer_id')
+        ->select('id', 'name','phone');
+    }
+
 
     public function details() {
         return $this->hasMany('App\Model\Order\Detail', 'order_id')

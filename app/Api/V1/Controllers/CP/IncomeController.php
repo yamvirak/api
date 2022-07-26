@@ -22,7 +22,12 @@ class IncomeController extends ApiController
         ->with([
             'type'
         ]);
-        
+        if( $req->key && $req->key !="" ){
+            $data = $data->where('receipt_number', 'like','%'.$req->key.'%');
+        }
+        if( $req->type && $req->type !="" ){
+            $data = $data->where('type_id', 'like','%'.$req->type.'%');
+        }
 
         $data = $data->orderBy('id', 'desc')->paginate( $req->limit ? $req->limit : 10);
         return response()->json($data, 200);
