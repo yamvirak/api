@@ -12,10 +12,11 @@
 		$api->post('/pos/order', 				['uses' => 'POSController@makeOrder']);
 
 		$api->get('/sales', 					['uses' => 'OrderController@listing']);
-		//$api->get('/sales/record', 				['uses' => 'OrderController@record']);
+		$api->get('/sales/record', 				['uses' => 'OrderController@record']);
+		$api->get('/sales/invoice/{id}', 		['uses' => 'OrderController@invoice']);
 		$api->delete('/sales/{id}', 			['uses' => 'OrderController@delete']);
 
-		$api->get('/sales/report', 			['uses' => 'ReportController@report']);
+		//$api->get('/sales/report', 			['uses' => 'ReportController@report']);
 
 
 		//===================>> Admin Only!!!! :(
@@ -24,6 +25,7 @@
 			$api->get('/branches', 			        ['uses' => 'BranchController@listing']);
 			$api->get('/branches/{id}',		    	['uses' => 'BranchController@view']);
 			$api->post('/branches', 			    ['uses' => 'BranchController@create']);
+			$api->post('/branches/add-staff/{id}', 	['uses' => 'BranchController@addStaff']);
 			$api->put('/branches/{id}',		    	['uses' => 'BranchController@update']);
 			$api->delete('/branches/{id}',		    ['uses' => 'BranchController@delete']);
 

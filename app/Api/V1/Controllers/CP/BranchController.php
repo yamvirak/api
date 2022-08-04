@@ -13,6 +13,7 @@ use JWTAuth;
 //=====================================================================>> Custom Library
 use App\Api\V1\Controllers\ApiController;
 use App\Model\Branch\Branch; 
+use App\Model\Branch\BranchAdmin;
 
 class BranchController extends ApiController
 {
@@ -136,6 +137,42 @@ class BranchController extends ApiController
         }
 
         
+    }
+
+    function addStaff(Request $req,$id = 0){
+
+        //==============================>> Check validation
+        $this->validate($req, [
+            
+            'admin_id'            =>  ['required'],
+            
+        ], 
+        [
+            'admin_id.required' => 'Please choose staff.', 
+        ]);
+
+        //==============================>> Start Adding data
+
+        $branch = Branch::find($id);
+
+        if($branch){
+            $staff                  =   New BranchAdmin; 
+            $staff->branch_id       =   $branch->id;  
+            $staff->admin_id        =   $req->admin_id;
+            $staff->role_id         =   $req->role_id;
+
+            $staff->save(); 
+        
+            return response()->json([
+                'staff' => $staff,
+                'message' => 'Staff has been successfully created.'
+            ], 200);
+        }else{
+
+            return response()->json([
+                'message' => 'Invalid branch.',
+            ], 400);
+        }
     }
     
 }

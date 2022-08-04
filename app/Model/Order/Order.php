@@ -18,7 +18,7 @@ class Order extends Model
 
     public function customer() {
         return $this->belongsTo('App\Model\Order\Customer', 'customer_id')
-        ->select('id', 'name','phone');
+        ->select('id', 'name','phone','address');
     }
 
 
@@ -26,7 +26,7 @@ class Order extends Model
         return $this->hasMany('App\Model\Order\Detail', 'order_id')
         ->select('id', 'order_id', 'qty', 'product_id', 'unit_price')
         ->with([
-            'product:id,name,image'
+            'product:id,name,image,unit_price'
         ])
         ;
     }

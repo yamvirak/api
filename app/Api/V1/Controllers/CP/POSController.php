@@ -64,6 +64,7 @@ class POSController extends ApiController
             $customer->save();
 
             $order                  = new Order; 
+            $order->cashier_id      = $req->cashier_id;
             $order->customer_id     = $customer->id; 
             $order->cashier_id      = $user->admin ? $user->admin->id : null; //TODO:: will find cashier later
             $order->receipt_number  = $this->generateReceiptNumber(); 
@@ -94,7 +95,8 @@ class POSController extends ApiController
                     'product_id'    => $productId, 
                     'qty'           => $qty, 
                     'discount'      => $product->discount,
-                    'unit_price'    => $product->unit_price
+                    'unit_price'    => $product->unit_price*$qty,
+
                 ];
 
                 $totalPrice +=  $qty*$product->unit_price - $qty*$product->unit_price*$product->discount*0.01; 

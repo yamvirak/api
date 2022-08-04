@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 
 use Dingo\Api\Routing\Helpers;
 use JWTAuth;
+use Carbon\Carbon;
 
 use App\Api\V1\Controllers\ApiController;
 use App\Model\Order\Order; 
@@ -79,16 +80,49 @@ class OrderController extends ApiController
         ->with([
             'cashier',
             'details',
+            'customer'
         ]); 
 
 
-    //    // ==============================>> Date Range
-    //    if($req->from && $req->to && isValidDate($req->from) && isValidDate($req->to)){
-    //     $data = $data->whereBetween('created_at', [$req->from." 00:00:00", $req->to." 23:59:59"]);
-    // }
+        // ==============================>> Date Range
+        if($req->from && $req->to){
+            $data = $data->whereBetween('created_at', [$req->from." 00:00:00", $req->to." 23:59:59"]);
+        }
     
         $data = $data->orderBy('id', 'desc')
-        ->paginate( $req->limit ? $req->limit : 10);
-        return response()->json($data, 200);
+        ->get();
+        //$currentTime = Carbon::now()->format('d-M-Y');
+        $payload = [
+            // 'type'          => $type,
+            // 'province'      => $province,  
+            // 'department'    => $department,  
+            // 'category'      => $category,
+            'from'          => $req->from,
+            'to'            => $req->to,
+            // 'today'         => $currentTime,
+            'data'          => $data,
+
+        ];
+        return $payload;
+
+    }
+    function invoice(Request $req, $id = 0){
+       
+        $data           = Order::select('*')
+        ->with([
+            'cashier',
+            'details',
+            'customer'
+        ])
+        ->where('id',$id); 
+        $data = $data->orderBy('id', 'desc')
+        ->get();
+        
+        $payload = [
+            'data'          => $data,
+
+        ];
+        return $payload;
+
     }
 }
