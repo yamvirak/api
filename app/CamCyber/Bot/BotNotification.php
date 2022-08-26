@@ -11,7 +11,9 @@ class BotNotification extends Controller
     public static function order($order){
        
 
-        $chatID = "-1001594365175"; 
+        // $chatID = "-1001689268654"; 
+
+        $chatID = env('ORDER_CHAT_ID');
        
         $str = ''; 
         $i = 1; 
