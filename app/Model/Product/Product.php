@@ -18,7 +18,7 @@ class Product extends Model
         ->select('id', 'name');
     }
     public function supplier() { //M:1
-        return $this->belongsTo('App\Model\Product\supplier', 'supplier_id')
+        return $this->belongsTo('App\Model\Product\Supplier', 'supplier_id')
         ->select('id', 'name');
     }
     public function branch() { //M:1
