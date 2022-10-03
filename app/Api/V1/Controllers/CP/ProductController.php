@@ -50,7 +50,7 @@ class ProductController extends ApiController
         //==============================>> Check validation
         $this->validate($req, [
             
-            'name'              => 'required|max:20',
+            'name'              => 'required|max:100',
             'type_id'           => 'required|exists:products_type,id',
             'unit_price'        => 'required|max:20',
             'discount'          => 'required|max:20'
@@ -103,7 +103,7 @@ class ProductController extends ApiController
          //==============================>> Check validation
          $this->validate($req, [
             
-            'name'              => 'required|max:20',
+            'name'              => 'required|max:100',
             'type_id'           => 'required|exists:products_type,id',
             'unit_price'        => 'required|max:20',
             'discount'          => 'required|max:20'
@@ -179,7 +179,7 @@ class ProductController extends ApiController
 
         if($stock){
 
-            $stock->available_stock               = $req->input('available_stock');
+            $stock->available_stock               = $stock->available_stock +$req->input('available_stock');
             $stock->save();
 
            return response()->json([

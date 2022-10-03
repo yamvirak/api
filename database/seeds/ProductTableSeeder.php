@@ -81,7 +81,15 @@ class ProductTableSeeder extends Seeder
                     ['product_id'=> 3, 'branch_id'=> 2 , 'available_stock'=> 0], 
                     ['product_id'=> 4, 'branch_id'=> 2 , 'available_stock'=> 0] ,  
                     ['product_id'=> 5, 'branch_id'=> 2 , 'available_stock'=> 0] , 
-                    ['product_id'=> 6, 'branch_id'=> 2, 'available_stock'=> 0],  
+                    ['product_id'=> 6, 'branch_id'=> 2, 'available_stock'=> 0], 
+                    ['product_id'=> 7, 'branch_id'=> 2, 'available_stock'=> 0], 
+                    ['product_id'=> 8, 'branch_id'=> 2, 'available_stock'=> 0], 
+                    ['product_id'=> 9, 'branch_id'=> 2, 'available_stock'=> 0], 
+                    ['product_id'=> 10, 'branch_id'=> 2, 'available_stock'=> 0], 
+                    ['product_id'=> 11, 'branch_id'=> 2, 'available_stock'=> 0], 
+                    ['product_id'=> 12, 'branch_id'=> 2, 'available_stock'=> 0], 
+                    ['product_id'=> 13, 'branch_id'=> 2, 'available_stock'=> 0], 
+                    ['product_id'=> 14, 'branch_id'=> 2, 'available_stock'=> 0],  
     
                 ]
             );

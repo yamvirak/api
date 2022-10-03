@@ -24,14 +24,31 @@ class POSController extends ApiController
 {
     use Helpers;
 
-    function getProducts(){
+    function getProductsType(Request $req){
 
         $data = ProductType::select('id', 'name')
         ->with([
             'products:id,name,image,type_id,unit_price,discount'
-        ])
-        ->get(); 
+        ]); 
 
+        if( $req->key && $req->key !="" ){
+            $data = $data->whereHas('products', function ($qury) use ($req){
+                $qury->where('name', 'like',$req->key.'%');
+            });
+        }
+        $data= $data->orderBy('id', 'desc')->get();
+        return $data;
+
+    }
+    function getProducts(Request $req){
+
+        $data = Product::select('*') 
+        ->with('type');
+
+        if( $req->key && $req->key !="" ){
+            $data = $data->where('name', 'like',$req->key.'%');
+        }
+        $data= $data->orderBy('id', 'desc')->get();
         return $data;
 
     }
@@ -117,16 +134,16 @@ class POSController extends ApiController
         $order->ordered_at      = Date('Y-m-d H:i:s'); 
         $order->save(); 
 
-        $income                 = new Income;
-        $income->type_id        =1;
-        $income->receipt_number = $order->receipt_number;
-        $income->total          = $totalPrice;
-        $income->save();
+        // $income                 = new Income;
+        // $income->type_id        =1;
+        // $income->receipt_number = $order->receipt_number;
+        // $income->total          = $totalPrice;
+        // $income->save();
 
         $stockOut          = Stock::updateStock($order);
 
         //ToDo: Send Notification
-        $botRes = BotNotification::order($order); 
+        //$botRes = BotNotification::order($order); 
         
         $data           = Order::select('*')
         ->with([
@@ -141,6 +158,7 @@ class POSController extends ApiController
             'order' => $data,
             'details' => $details, 
             'total_price' => $totalPrice, 
+            'total_resive' => $totalPriceKhr,
             'message' => 'Order has been successfully created.'
         ], 200);
         

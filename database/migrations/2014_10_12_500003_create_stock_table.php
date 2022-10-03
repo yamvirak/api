@@ -22,7 +22,7 @@ class CreateStockTable extends Migration
             $table->integer('branch_id')->unsigned()->index()->nullable();
             $table->foreign('branch_id')->references('id')->on('branch')->onDelete('cascade');
                        
-            $table->integer('available_stock')->unsigned()->nullable();
+            $table->integer('available_stock')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

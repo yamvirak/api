@@ -9,6 +9,7 @@
 		$api->delete('/orders/{id}', 			['uses' => 'OrderController@delete']);
 
 		$api->get('/pos/products', 				['uses' => 'POSController@getProducts']);
+		$api->get('/pos/products-tpye', 				['uses' => 'POSController@getProductsType']);
 		$api->post('/pos/order', 				['uses' => 'POSController@makeOrder']);
 
 		$api->get('/sales', 					['uses' => 'OrderController@listing']);

@@ -75,7 +75,8 @@ class OrderController extends ApiController
     }
     
     function record(Request $req){
-       
+
+        $user         = JWTAuth::parseToken()->authenticate();
         $data           = Order::select('*')
         ->with([
             'cashier',
@@ -91,7 +92,7 @@ class OrderController extends ApiController
     
         $data = $data->orderBy('id', 'desc')
         ->get();
-        //$currentTime = Carbon::now()->format('d-M-Y');
+        $total = $data->sum('total_price_khr');
         $payload = [
             // 'type'          => $type,
             // 'province'      => $province,  
@@ -99,8 +100,10 @@ class OrderController extends ApiController
             // 'category'      => $category,
             'from'          => $req->from,
             'to'            => $req->to,
-            // 'today'         => $currentTime,
+            'total'         => $total,
+            'user'          => $user->name,
             'data'          => $data,
+            
 
         ];
         return $payload;

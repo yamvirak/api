@@ -22,6 +22,7 @@ class ProductTypeController extends ApiController
         //->with(['products'])
         
         ->orderBy('name', 'ASC')
+        ->withCount('products')
         ->get();
         
         return $data; 
@@ -33,7 +34,7 @@ class ProductTypeController extends ApiController
         //==============================>> Check validation
         $this->validate($req, [
             
-            'name'             => 'required|max:20',
+            'name'             => 'required|max:100',
         ], 
         [
             'name.required'    => 'Please enter the name.', 
@@ -59,7 +60,7 @@ class ProductTypeController extends ApiController
          //==============================>> Check validation
          $this->validate($req, [
             
-            'name'             =>  'required|max:20',
+            'name'             =>  'required|max:100',
 
         ], 
         [
