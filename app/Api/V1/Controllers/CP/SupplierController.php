@@ -10,7 +10,7 @@ use Dingo\Api\Routing\Helpers;
 use JWTAuth;
 
 use App\Api\V1\Controllers\ApiController;
-use App\Model\Product\Supplier; 
+use App\Model\Product\Supplier as Suppliers; 
 
 class SupplierController extends ApiController
 {
@@ -19,7 +19,7 @@ class SupplierController extends ApiController
     function listing(Request $req){
        
       
-        $data           = Supplier::select('*');
+        $data           = Suppliers::select('*');
         
         if( $req->key && $req->key !="" ){
             $data = $data->where('name', 'like','%'.$req->key.'%')->orWhere('phone', 'like','%'.$req->key.'%');
@@ -44,7 +44,7 @@ class SupplierController extends ApiController
 
         //==============================>> Start Adding data
 
-        $supplier               =   New Supplier; 
+        $supplier               =   New Suppliers; 
         $supplier->name         =   $req->name;
         $supplier->phone        =   $req->phone;
         $supplier->address      =   $req->address;  
@@ -72,7 +72,7 @@ class SupplierController extends ApiController
         ]);
         
         //==============================>> Start Updating data
-        $supplier                         = Supplier::find($id);
+        $supplier                         = Suppliers::find($id);
         if( $supplier){
 
             $supplier->name         =   $req->name;
@@ -101,7 +101,7 @@ class SupplierController extends ApiController
 
      function delete($id = 0){
         
-        $data = Type::find($id);
+        $data = Suppliers::find($id);
 
         //==============================>> Start deleting data
         if($data){
