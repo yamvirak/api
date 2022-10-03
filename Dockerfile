@@ -3,7 +3,7 @@ EXPOSE 8000
 
 COPY .  /var/www
 RUN rm -f composer.lock
-RUN composer install
+RUN composer update --ignore-platform-reqs
 RUN cp .env.example .env
 RUN php artisan key:generate
 
