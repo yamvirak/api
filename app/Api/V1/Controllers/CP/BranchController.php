@@ -174,5 +174,30 @@ class BranchController extends ApiController
             ], 400);
         }
     }
+    function deleteStaff(Request $req,$id=0){
+       
+        $data = BranchAdmin::where([
+            // 'branch_id'=>$req->branch_id,
+            'admin_id'=>$id
+        ])->first();
+        //==============================>> Start deleting data
+        if($data){ 
+            $data->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data has been deleted',
+            ], 200);
+
+        }else{
+
+            return response()->json([
+                'message' => 'Invalid data.',
+            ], 400);
+
+        }
+
+        
+    }
     
 }

@@ -29,6 +29,7 @@
 			$api->post('/branches/add-staff/{id}', 	['uses' => 'BranchController@addStaff']);
 			$api->put('/branches/{id}',		    	['uses' => 'BranchController@update']);
 			$api->delete('/branches/{id}',		    ['uses' => 'BranchController@delete']);
+			$api->delete('/branches/staff/{id}',    ['uses' => 'BranchController@deleteStaff']);
 
 			$api->get('/expenses/types', 			['uses' => 'ExpenseTypeController@listing']);
 			$api->post('/expenses/types', 			['uses' => 'ExpenseTypeController@create']);
@@ -74,6 +75,9 @@
 
 			$api->get('/users', 						['uses' => 'UserController@listing']);
 			$api->post('/users/{id}/change-password',   ['uses' => 'UserController@changePassword']);
+			$api->post('/users', 					['uses' => 'UserController@create']);
+			$api->put('/users/{id}', 				['uses' => 'UserController@update']);
+			$api->delete('/users/{id}', 			['uses' => 'UserController@delete']);
 			
 		});
 

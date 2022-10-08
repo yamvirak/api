@@ -28,7 +28,7 @@ class OrderController extends ApiController
 
 
        // ==============================>> Date Range
-       if($req->from && $req->to && isValidDate($req->from) && isValidDate($req->to)){
+       if($req->from && $req->to){
             $data = $data->whereBetween('created_at', [$req->from." 00:00:00", $req->to." 23:59:59"]);
         }
         

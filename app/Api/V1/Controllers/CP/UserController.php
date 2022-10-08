@@ -11,6 +11,8 @@ use JWTAuth;
 
 use App\Api\V1\Controllers\ApiController;
 use App\Model\User\Main as User; 
+use App\Model\Branch\BranchAdmin;
+use App\Model\Admin\Admin;
 
 class UserController extends ApiController
 {
@@ -20,7 +22,9 @@ class UserController extends ApiController
        
         $data           = User::select('*')
         ->with([
-            'type'
+            'type',
+            'admin',
+            'admin.branches.branch'
         ]);
         
         if( $req->key && $req->key !="" ){
@@ -61,36 +65,71 @@ class UserController extends ApiController
        
         
     }
-  
-
-    
-
-
-   /* function create(Request $req){
+    function create(Request $req){
 
         //==============================>> Check validation
         $this->validate($req, [
-            
-            'total'             => 'required|max:20',
-            'type_id'           => 'required|exists:expenses_type,id'
+            'name'                 => 'required|max:40',
+            'phone'                =>  [
+                                        'required', 
+                                        'regex:/(^[0][0-9].{7}$)|(^[0][0-9].{8}$)/', 
+                                        Rule::unique('user', 'phone')
+                                    ],
+            'email'                 =>[
+                                        'required',
+                                        Rule::unique('user','email')
+                                    ],
+            'password'             => 'required|min:6|max:20',
+            'branch_id'            => 'required',
+            'role_id'              => 'required',
         ], 
         [
-            'total.required' => 'Please enter the total.',
-            'total.max' => 'Total cannot be more than 20 characters.',
-            'type_id.exists' => 'Please select correct type.'
+                'name.required'     => 'Please input user name',
+                'name.max'          => 'Name not more than 40 letters',
+                'branch_id.required'=> 'Please input Branch',
+                'phone.required'    => 'Please input phone number',
+                'phone.regex'       => 'Please input correct phone number',
+                'phone.unique'      => 'This number is already to use',
+                'password.required' => 'Please input password',
+                'password.min'      => 'Password cannot be less than 6 characters',
+                'password.max'      => 'Password no longer than 20 characters',
+                'email.required'    => 'Please input email',
+                'email.unique'      => 'This email is already to use',
+                'role_id.required'  => 'Please input Role',
         ]);
 
         //==============================>> Start Adding data
 
-        $expense                =   New Expense; 
-        $expense->total         =   $req->total;  
-        $expense->type_id       =   $req->type_id; 
+        $data               =   New User; 
+        $data->name         =   $req->name;  
+        $data->phone        =   $req->phone; 
+        $data->type_id      =   2;  
+        $data->email        =   $req->email; 
+        $data->is_email_verified = 1;  
+        $data->password     =   bcrypt($req->password); 
+        $data->is_notified_when_login = 1;  
+        $data->is_notified_when_login_with_unknown_device        =   1; 
+        $data->is_active    =   1;
 
-        $expense  ->save(); 
+        $data  ->save(); 
+
+        if($data){
+            $admin              = New Admin;
+            $admin->user_id     = $data->id;
+            $admin->is_supper   = 0;
+            $admin->save();
+            if($admin){
+                $branch             = New BranchAdmin;
+                $branch->admin_id   = $admin->id;
+                $branch->branch_id  = $req->branch_id;
+                $branch->role_id    = $req->role_id;
+                $branch->save(); 
+            }
+        }
     
         return response()->json([
-            'expense' => $expense,
-            'message' => 'Expense has been successfully created.'
+            'User' => $data,
+            'message' => 'User has been successfully created.'
         ], 200);
         
     }
@@ -99,28 +138,65 @@ class UserController extends ApiController
 
          //==============================>> Check validation
          $this->validate($req, [
-            
-            'total'             =>  'required|max:20',
-            'type_id'           =>  'required|exists:expenses_type,id'
-
+            'name'                 => 'required|max:40',
+            'phone'                =>  [
+                                        'required', 
+                                        'regex:/(^[0][0-9].{7}$)|(^[0][0-9].{8}$)/', 
+                                        Rule::unique('user', 'phone')->ignore($id)
+                                    ],
+            'email'                 =>[
+                                        'required',
+                                        Rule::unique('user','email')->ignore($id)
+                                    ],
+            'branch_id'            => 'required',
+            'role_id'              => 'required',
         ], 
         [
-            'total.required' => 'Please enter the total.', 
-            'total.max' => 'Total cannot be more than 20 characters.',
-            'type_id.exists' => 'Please select correct type.'
-        ]);
+            'name.required'     => 'Please input user name',
+            'name.max'          => 'Name not more than 40 letters',
+            'branch_id.required'=> 'Please input Branch',
+            'phone.required'    => 'Please input phone number',
+            'phone.regex'       => 'Please input correct phone number',
+            'phone.unique'      => 'This number is already to use',
+            'email.required'    => 'Please input email',
+            'email.unique'      => 'This email is already to use',
+            'role_id.required'  => 'Please input Role',
+    ]);
         
         //==============================>> Start Updating data
-        $expense                         = Expense::find($id);
-        if( $expense){
+        $data                         = User::find($id);
+        if( $data){
 
-            $expense->total              = $req->input('total');
-            $expense->save();
+            $data->name         =   $req->name;  
+            $data->phone        =   $req->phone; 
+            $data->type_id      =   2;  
+            $data->email        =   $req->email; 
+            $data->is_email_verified = 1;  
+            $data->password     =   bcrypt($req->password); 
+            $data->is_notified_when_login = 1;  
+            $data->is_notified_when_login_with_unknown_device        =   1; 
+            $data->is_active    =   1;
+    
+            $data  ->save(); 
+    
+            if($data){
+                
+                $admin              = Admin::where('user_id',$data->id)->first();
+                $admin->is_supper   = 0;
+                $admin->save();
+                if($admin){
+                    
+                    $branch             = BranchAdmin::where('admin_id',$admin->id)->first();
+                    $branch->branch_id  = $req->branch_id;
+                    $branch->role_id    = $req->role_id;
+                    $branch->save(); 
+                }
+            }
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Expense has been updated Successfully',
-                'expense' => $expense,
+                'message' => 'User has been updated Successfully',
+                'Data' => $data,
             ], 200);
 
         }else{
@@ -137,7 +213,7 @@ class UserController extends ApiController
 
      function delete($id = 0){
         
-        $data = Expense::find($id);
+        $data = User::find($id);
 
         //==============================>> Start deleting data
         if($data){
@@ -158,6 +234,5 @@ class UserController extends ApiController
         }
 
         
-    }
- */   
+    }  
 }
