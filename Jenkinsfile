@@ -12,7 +12,7 @@ pipeline {
                  sh 'ssh -o StrictHostKeyChecking=no root@157.245.193.126 " cd ~/knk/api/;\
                 git pull;\
                 cd ..;\
-                docker-compose up -d --build;\
+                docker-compose up -d;\
                 "'
             }
         }
