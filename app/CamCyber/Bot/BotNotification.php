@@ -26,9 +26,9 @@ $totalProduct.= $i.'. '.$detail->product->name.'('.number_format($detail->unit_p
 
         if($order){
 
-            $chatID =-1001772415105;
-            //$chatID = env('ORDER_CHAT_ID'); 
-           // $chatID = Telegram::where('slug', 'CHANNEL_ORDER_CHAT_ID')->first()->chat_id;
+            
+            $chatID = env('ORDER_CHAT_ID'); 
+           
 
             $res = TelegramBot::sendMessage([
                 'chat_id' => $chatID, 
