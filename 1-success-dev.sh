@@ -3,8 +3,6 @@
 CHAT_ID="-1001753900564"
 BOT_TOKEN=5661991500:AAGCoupSna5pCqe7oH-KMaUh0KloW6gxnsw
 
-
-
 # HASH=$(git log -n 1 |grep commit)
 # AUTHOR=$(git show $HASH | grep Author)
 # MESSAGE=$(git show -s --format=%s)
