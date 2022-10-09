@@ -36,11 +36,12 @@ $totalProduct.= $i.'. '.$detail->product->name.'('.number_format($detail->unit_p
 * លេខវិក័យប័ត្រ: '.$order->receipt_number.'
 * អ្នកគិតលុយ: '.$order->cashier->name.'
 * កាលបរិច្ឆេទវិក័យប័ត្រ: '.$order->ordered_at.'
+* លុយសរុប: '.$order->total_price.'
+* បញ្ចុះតម្តៃ: '.$order->discount.'%
+* លុយទទួលបាន: '.$order->total_price_khr.'
 * <b>ផលិតផលលក់ចេញ:</b>
 '.$totalProduct.'
-* លុយសរុប: '.$order->total_price.'
-* បញ្ចុះតម្តៃ: '.$order->discount.'
-* លុយទទួលបាន: '.$order->total_price_khr.'
+
 ',               'parse_mode' => 'HTML'
             ]);
 
