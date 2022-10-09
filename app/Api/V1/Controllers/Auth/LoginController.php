@@ -87,7 +87,7 @@ class LoginController extends ApiController
 
         //Check if this user is a branch manager, then check if having branch. 
         if($user->type_id == 2){//
-            $branchAdmin = BranchAdmin::with(['branch'])->where('admin_id', $user->id)->first(); 
+            $branchAdmin = BranchAdmin::with(['branch'])->where('admin_id', $user->admin->id)->first();
             if(!$branchAdmin){
                 return response()->json([
                     'status'=> 'You dont have a branch'
