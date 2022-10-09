@@ -143,7 +143,7 @@ class POSController extends ApiController
         $stockOut          = Stock::updateStock($order);
 
         //ToDo: Send Notification
-        $botRes = BotNotification::order($order); 
+        //$botRes = BotNotification::order($order); 
         
         $data           = Order::select('*')
         ->with([
