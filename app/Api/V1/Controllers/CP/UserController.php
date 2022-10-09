@@ -25,7 +25,8 @@ class UserController extends ApiController
             'type',
             'admin',
             'admin.branches.branch'
-        ]);
+        ])
+        ->where('type_id',2);
         
         if( $req->key && $req->key !="" ){
             $data = $data->where('name', 'like','%'.$req->key.'%')->orWhere('phone', 'like','%'.$req->key.'%');

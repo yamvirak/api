@@ -78,6 +78,11 @@
 			$api->post('/users', 					['uses' => 'UserController@create']);
 			$api->put('/users/{id}', 				['uses' => 'UserController@update']);
 			$api->delete('/users/{id}', 			['uses' => 'UserController@delete']);
+
+			$api->get('/myprofile', 						['uses' => 'MyProfileController@get']);
+			$api->put('/myprofile', 						['uses' => 'MyProfileController@put']); 
+			$api->put('/myprofile/change-password', 		['uses' => 'MyProfileController@changePassword']); //Update
+
 			
 		});
 
