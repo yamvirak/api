@@ -29,7 +29,4 @@ class ReportController extends ApiController
        //return $data;
        return view($this->route.'.sale-report', ['route'=>$this->route, 'data'=>$data, 'from'=>$req->from, 'to'=>$req->to]);
     }
-
-    
-   
 }
