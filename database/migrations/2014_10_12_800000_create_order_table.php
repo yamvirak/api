@@ -22,7 +22,7 @@ class CreateOrderTable extends Migration
             $table->foreign('cashier_id')->references('id')->on('admin')->onDelete('cascade');
 
             $table->integer('customer_id')->unsigned()->nullable();
-            $table->foreign('customer_id')->references('id')->on('customer');
+            $table->foreign('customer_id')->references('id')->on('customer')->onDelete('cascade');
 
             $table->decimal('total_price', 10, 2)->default(0);
             $table->decimal('discount', 10, 2)->default(0);
