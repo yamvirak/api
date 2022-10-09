@@ -18,7 +18,7 @@ class CreateOrderDetailsTable extends Migration
             $table->increments('id', 11);
 
             $table->integer('order_id')->unsigned()->nullable();
-            $table->foreign('order_id')->references('id')->on('order');
+            $table->foreign('order_id')->references('id')->on('order')->onDelete('cascade');
 
             $table->integer('product_id')->unsigned()->nullable();
             $table->foreign('product_id')->references('id')->on('product')->onDelete('cascade');
